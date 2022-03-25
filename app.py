@@ -9,8 +9,8 @@ import pandas as pd
 TODAY = datetime.today()
 
 # WebAPI(Index)
-# URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
-URL_INDEX = 'http://127.0.0.1:8000/'   # ローカルサーバ
+URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
+# URL_INDEX = 'http://127.0.0.1:8000/'   # ローカルサーバ
 
 # WebAPI(全件取得)
 URL_GET_ALL_DATA = URL_INDEX + 'data/'
@@ -25,24 +25,28 @@ page = st.sidebar.selectbox('Choose your page', ['main', 'log', 'test'])
 if page == 'main':
     # 今日付のデータを取得
     res = requests.get(URL_GET_DATA_BY_DATE)
+
     # 取得したデータを変換(=> dict)
     today_data = ast.literal_eval(json.loads(res.text))
-    # 日付
-    saving_date = today_data["SAVING_DATE"]
-    # 今日の貯金枚数
-    amount = today_data["AMOUNT"]
-    # 今までの貯金額
-    total_price = today_data["TOTAL_AMOUNT"] * 500
 
+    # 各項目を取得
+    saving_date = today_data["SAVING_DATE"] # 日付
+    amount = today_data["AMOUNT"] # 今日の貯金枚数
+    total_price = today_data["TOTAL_AMOUNT"] * 500 # 今までの貯金額
+
+    # タイトルを描画
     st.title('500円玉貯金アプリ')
+
+    # フォームの定義
     with st.form(key='main'):
-        amount: int = st.number_input('枚数', step=1)
+        input_amount: int = st.number_input('枚数', step=1)
         req = {
-            'amount': amount,
+            'amount': input_amount,
             'target_date': TODAY.strftime('%Y-%m-%d'),
         }
         submit_button = st.form_submit_button(label='submit')
 
+    # ボタン押下時の挙動
     if submit_button:
         # WebAPI(更新)のURLを生成
         URL_UPDATE = URL_INDEX + 'update/' + req['target_date'] + '/' + str(req['amount'])
@@ -60,6 +64,7 @@ if page == 'main':
         amount = updated_data["AMOUNT"]
         total_price = updated_data["TOTAL_AMOUNT"] * 500
 
+    # ページ下部の情報を描画
     st.write((f'日付: {saving_date}'))
     st.write((f'今日の貯金枚数: {amount}枚'))
     st.write((f'今までの貯金額: ¥{total_price:,}'))
@@ -78,10 +83,10 @@ elif page == 'log':
     # 取得したデータを変換(=> dict)
     log_date = ast.literal_eval(json.loads(res.text))
 
-    # 画面項目の描画
+    # タイトルを描画
     st.title('500円玉貯金ログ')
 
-    # # データフレームの描画
+    # データフレームの生成
     df = pd.DataFrame(log_date) # データフレーム化
     df['TOTAL_PRICE'] = df['TOTAL_AMOUNT'] * 500 # 累計金額列を追加
     df = df[['SAVING_DATE', 'AMOUNT', 'TOTAL_AMOUNT', 'TOTAL_PRICE', 'UPDATED_AT']] # 表示列を定義
@@ -102,6 +107,7 @@ elif page == 'log':
         }
     )
     
+    # データフレームを描画
     st.dataframe(df, 800, 400)
 
 
