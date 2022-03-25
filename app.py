@@ -19,7 +19,7 @@ URL_GET_ALL_DATA = URL_INDEX + 'data/'
 URL_GET_DATA_BY_DATE = URL_GET_ALL_DATA + TODAY.strftime('%Y-%m-%d')
 
 # サイドバーで選択されたページを取得
-page = st.sidebar.selectbox('Choose your page', ['main', 'log'])
+page = st.sidebar.selectbox('Choose your page', ['main', 'log', 'test'])
 
 # メイン画面
 if page == 'main':
@@ -83,7 +83,28 @@ elif page == 'log':
 
     # # データフレームの描画
     df = pd.DataFrame(log_date) # データフレーム化
-    df = df.sort_values('SAVING_DATE', ascending=False) # 降順にソート
     df['TOTAL_PRICE'] = df['TOTAL_AMOUNT'] * 500 # 累計金額列を追加
     df = df[['SAVING_DATE', 'AMOUNT', 'TOTAL_AMOUNT', 'TOTAL_PRICE', 'UPDATED_AT']] # 表示列を定義
-    st.dataframe(df, 800, 800)
+
+    # 表示用に値を整形
+    for i, data in df.iterrows():
+        df.loc[i, 'TOTAL_PRICE'] = '¥' + '{:,}'.format(data['TOTAL_PRICE']) # 累計金額
+        df.loc[i, 'UPDATED_AT'] = data['UPDATED_AT']['$date'] # 更新日時
+
+    # ヘッダー名称を変更
+    df = df.rename(
+        columns={
+            "SAVING_DATE": "日付",
+            "AMOUNT": "枚数",
+            "TOTAL_AMOUNT": "累計枚数",
+            "TOTAL_PRICE": "累計金額",
+            "UPDATED_AT": "更新日時",
+        }
+    )
+    
+    st.dataframe(df, 800, 400)
+
+
+# 試験画面
+elif page == 'test':
+    pass
