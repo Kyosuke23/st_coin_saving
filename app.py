@@ -10,7 +10,8 @@ import numpy as np
 TODAY = datetime.today()
 
 # WebAPI(Index)
-URL_INDEX = 'https://qjljun.deta.dev/'
+# URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
+URL_INDEX = 'http://127.0.0.1:8000/'   # ローカルサーバ
 
 # WebAPI(全件取得)
 URL_GET_ALL_DATA = URL_INDEX + 'data/'
@@ -28,12 +29,28 @@ if page == 'main':
     # 取得したデータを変換(=> dict)
     today_data = ast.literal_eval(json.loads(response.text))
 
-    # 画面項目の描画
     st.title('500円玉貯金アプリ')
-    st.write((f'日付: {today_data["SAVING_DATE"]}'))
-    st.write((f'今日の貯金枚数: {today_data["AMOUNT"]}枚'))
-    st.write((f'今までの貯金額: ¥{today_data["TOTAL_AMOUNT"] * 500:,}'))
+    with st.form(key='main'):
+        amount: int = st.number_input('枚数', step=1)
+        data = {
+            'amount': amount,
+            'target_date' : TODAY.strftime('%Y-%m-%d'),
+        }
+        submit_button = st.form_submit_button(label='submit')
+        st.write((f'日付: {today_data["SAVING_DATE"]}'))
+        st.write((f'今日の貯金枚数: {today_data["AMOUNT"]}枚'))
+        st.write((f'今までの貯金額: ¥{today_data["TOTAL_AMOUNT"] * 500:,}'))
 
+    if submit_button:
+        # WebAPI(更新)のURLを生成
+        URL_UPDATE = URL_INDEX + 'update/' + data['target_date'] + '/' + str(data['amount'])
+        response = requests.post(URL_UPDATE, data= json.dumps(data))
+        print('--- 送信データ ------------------------------')
+        print(data)
+        print('--- 受信データ ------------------------------')
+        print(response.json())
+
+# ログ画面
 elif page == 'log':
     # 1年前の日付
     DATE_PASR_1Y = TODAY + timedelta(days=-365)
