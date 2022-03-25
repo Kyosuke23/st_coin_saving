@@ -1,13 +1,16 @@
 import streamlit as st
 import requests
-import datetime
+from datetime import datetime, timedelta
 import json
 import ast
 
-TODAY = datetime.datetime.today().strftime('%Y-%m-%d')
+# 今日の日付
+TODAY = datetime.today()
+
+# WebAPI(Index)
 URL_INDEX = 'https://qjljun.deta.dev/'
-URL_GET_ALL_DATA = 'https://qjljun.deta.dev/data'
-URL_GET_DATA_BY_DATE = 'https://qjljun.deta.dev/data/' + TODAY
+URL_GET_ALL_DATA = URL_INDEX + 'data/'
+URL_GET_DATA_BY_DATE = URL_GET_ALL_DATA + TODAY.strftime('%Y-%m-%d')
 
 # サイドバーで選択されたページを取得
 page = st.sidebar.selectbox('Choose your page', ['main', 'log'])
