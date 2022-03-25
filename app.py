@@ -22,7 +22,7 @@ URL_GET_DATA_BY_DATE = URL_GET_ALL_DATA + TODAY.strftime('%Y-%m-%d')
 page = st.sidebar.selectbox('Choose your page', ['main', 'log'])
 
 # メイン画面
-if page == 'main1':
+if page == 'main':
     # 今日付のデータを取得
     response = requests.get(URL_GET_DATA_BY_DATE)
     # 取得したデータを変換(=> dict)
@@ -34,7 +34,7 @@ if page == 'main1':
     st.write((f'今日の貯金枚数: {today_data["AMOUNT"]}枚'))
     st.write((f'今までの貯金額: ¥{today_data["TOTAL_AMOUNT"] * 500:,}'))
 
-elif page == 'main':
+elif page == 'log':
     # 1年前の日付
     DATE_PASR_1Y = TODAY + timedelta(days=-365)
 
