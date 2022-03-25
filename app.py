@@ -9,7 +9,11 @@ TODAY = datetime.today()
 
 # WebAPI(Index)
 URL_INDEX = 'https://qjljun.deta.dev/'
+
+# WebAPI(全件取得)
 URL_GET_ALL_DATA = URL_INDEX + 'data/'
+
+# WebAPI(日付による絞り込み検索)
 URL_GET_DATA_BY_DATE = URL_GET_ALL_DATA + TODAY.strftime('%Y-%m-%d')
 
 # サイドバーで選択されたページを取得
