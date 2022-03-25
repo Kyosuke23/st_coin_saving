@@ -75,10 +75,10 @@ elif page == 'log':
     URL_GET_DATA_BETWEEN_DATE = URL_GET_ALL_DATA + DATE_PASR_1Y.strftime('%Y-%m-%d') + '/' + TODAY.strftime('%Y-%m-%d')
     
     # 過去1年のデータを取得
-    response = requests.get(URL_GET_DATA_BETWEEN_DATE)
+    res = requests.get(URL_GET_DATA_BETWEEN_DATE)
 
     # 取得したデータを変換(=> dict)
-    log_date = ast.literal_eval(json.loads(response.text))
+    log_date = ast.literal_eval(json.loads(res.text))
 
     # 画面項目の描画
     st.title('500円玉貯金ログ')
