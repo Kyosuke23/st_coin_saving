@@ -1,3 +1,4 @@
+from turtle import update
 import streamlit as st
 import requests
 from datetime import datetime, timedelta
@@ -28,18 +29,21 @@ if page == 'main':
     res = requests.get(URL_GET_DATA_BY_DATE)
     # 取得したデータを変換(=> dict)
     today_data = ast.literal_eval(json.loads(res.text))
+    # 日付
+    saving_date = today_data["SAVING_DATE"]
+    # 今日の貯金枚数
+    amount = today_data["AMOUNT"]
+    # 今までの貯金額
+    total_price = today_data["TOTAL_AMOUNT"] * 500
 
     st.title('500円玉貯金アプリ')
     with st.form(key='main'):
         amount: int = st.number_input('枚数', step=1)
         req = {
             'amount': amount,
-            'target_date' : TODAY.strftime('%Y-%m-%d'),
+            'target_date': TODAY.strftime('%Y-%m-%d'),
         }
         submit_button = st.form_submit_button(label='submit')
-        st.write((f'日付: {today_data["SAVING_DATE"]}'))
-        st.write((f'今日の貯金枚数: {today_data["AMOUNT"]}枚'))
-        st.write((f'今までの貯金額: ¥{today_data["TOTAL_AMOUNT"] * 500:,}'))
 
     if submit_button:
         # WebAPI(更新)のURLを生成
@@ -49,7 +53,19 @@ if page == 'main':
         print(req)
         print('--- 受信データ ------------------------------')
         print(res.json())
+        
+        # 更新後のデータ
+        updated_data = ast.literal_eval(json.loads(res.text))['updated_data']
 
+        # 更新後の値で描画
+        saving_date = updated_data["SAVING_DATE"]
+        amount = updated_data["AMOUNT"]
+        total_price = updated_data["TOTAL_AMOUNT"] * 500
+
+    st.write((f'日付: {saving_date}'))
+    st.write((f'今日の貯金枚数: {amount}枚'))
+    st.write((f'今までの貯金額: ¥{total_price:,}'))
+        
 # ログ画面
 elif page == 'log':
     # 1年前の日付
