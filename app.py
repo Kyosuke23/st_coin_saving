@@ -1,11 +1,9 @@
-from turtle import update
 import streamlit as st
 import requests
 from datetime import datetime, timedelta
 import json
 import ast
 import pandas as pd
-import numpy as np
 
 # 今日の日付
 TODAY = datetime.today()
