@@ -25,14 +25,14 @@ page = st.sidebar.selectbox('Choose your page', ['main', 'log'])
 # メイン画面
 if page == 'main':
     # 今日付のデータを取得
-    response = requests.get(URL_GET_DATA_BY_DATE)
+    res = requests.get(URL_GET_DATA_BY_DATE)
     # 取得したデータを変換(=> dict)
-    today_data = ast.literal_eval(json.loads(response.text))
+    today_data = ast.literal_eval(json.loads(res.text))
 
     st.title('500円玉貯金アプリ')
     with st.form(key='main'):
         amount: int = st.number_input('枚数', step=1)
-        data = {
+        req = {
             'amount': amount,
             'target_date' : TODAY.strftime('%Y-%m-%d'),
         }
@@ -43,12 +43,12 @@ if page == 'main':
 
     if submit_button:
         # WebAPI(更新)のURLを生成
-        URL_UPDATE = URL_INDEX + 'update/' + data['target_date'] + '/' + str(data['amount'])
-        response = requests.post(URL_UPDATE, data= json.dumps(data))
+        URL_UPDATE = URL_INDEX + 'update/' + req['target_date'] + '/' + str(req['amount'])
+        res = requests.post(URL_UPDATE, data= json.dumps(req))
         print('--- 送信データ ------------------------------')
-        print(data)
+        print(req)
         print('--- 受信データ ------------------------------')
-        print(response.json())
+        print(res.json())
 
 # ログ画面
 elif page == 'log':
