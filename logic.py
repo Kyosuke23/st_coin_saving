@@ -5,9 +5,6 @@ import json
 import ast
 import pandas as pd
 
-# 今日の日付
-TODAY = datetime.today()
-
 # WebAPI(Index)
 URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
 # URL_INDEX = 'http://127.0.0.1:8000/'   # ローカルサーバ
@@ -15,29 +12,12 @@ URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
 # WebAPI(全件取得)
 URL_GET_ALL_DATA = URL_INDEX + 'data/'
 
-# WebAPI(日付による絞り込み検索)
-URL_GET_DATA_BY_DATE = URL_GET_ALL_DATA + TODAY.strftime('%Y-%m-%d')
-
-def define_const():
-    # 今日の日付
-    TODAY = datetime.today()
-
-    # WebAPI(Index)
-    URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
-    # URL_INDEX = 'http://127.0.0.1:8000/'   # ローカルサーバ
-
-    # WebAPI(全件取得)
-    URL_GET_ALL_DATA = URL_INDEX + 'data/'
-
-    # WebAPI(日付による絞り込み検索)
-    URL_GET_DATA_BY_DATE = URL_GET_ALL_DATA + TODAY.strftime('%Y-%m-%d')
-
 def show_input_area():
     """
     入力フォーム周りの描画
     """
     # 今日付のデータを取得
-    res = requests.get(URL_GET_DATA_BY_DATE)
+    res = requests.get(URL_GET_ALL_DATA + datetime.today().strftime('%Y-%m-%d'))
 
     # 取得したデータを変換(=> dict)
     today_data = ast.literal_eval(json.loads(res.text))
@@ -55,7 +35,7 @@ def show_input_area():
         input_amount: int = st.number_input('枚数', step=1)
         req = {
             'amount': input_amount,
-            'target_date': TODAY.strftime('%Y-%m-%d'),
+            'target_date': datetime.today().strftime('%Y-%m-%d'),
         }
         submit_button = st.form_submit_button(label='submit')
 
@@ -88,10 +68,10 @@ def show_log_table():
     ログテーブルの描画
     """
     # 1年前の日付
-    DATE_PASR_1Y = TODAY + timedelta(days=-365)
+    DATE_PASR_1Y = datetime.today() + timedelta(days=-365)
 
     # 範囲検索のURI生成
-    URL_GET_DATA_BETWEEN_DATE = URL_GET_ALL_DATA + DATE_PASR_1Y.strftime('%Y-%m-%d') + '/' + TODAY.strftime('%Y-%m-%d')
+    URL_GET_DATA_BETWEEN_DATE = URL_GET_ALL_DATA + DATE_PASR_1Y.strftime('%Y-%m-%d') + '/' + datetime.today().strftime('%Y-%m-%d')
     
     # 過去1年のデータを取得
     res = requests.get(URL_GET_DATA_BETWEEN_DATE)
