@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 import json
 import ast
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 # WebAPI(Index)
 URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
@@ -77,13 +79,13 @@ def show_log_table():
     res = requests.get(URL_GET_DATA_BETWEEN_DATE)
 
     # 取得したデータを変換(=> dict)
-    log_date = ast.literal_eval(json.loads(res.text))
+    log_data = ast.literal_eval(json.loads(res.text))
 
     # タイトルを描画
     st.write('## 貯金履歴')
 
     # データフレームの生成
-    df = pd.DataFrame(log_date) # データフレーム化
+    df = pd.DataFrame(log_data) # データフレーム化
     df['TOTAL_PRICE'] = df['TOTAL_AMOUNT'] * 500 # 累計金額列を追加
     df = df[['SAVING_DATE', 'AMOUNT', 'TOTAL_AMOUNT', 'TOTAL_PRICE', 'UPDATED_AT']] # 表示列を定義
 
@@ -95,11 +97,11 @@ def show_log_table():
     # ヘッダー名称を変更
     df = df.rename(
         columns={
-            "SAVING_DATE": "日付",
-            "AMOUNT": "枚数",
-            "TOTAL_AMOUNT": "累計枚数",
-            "TOTAL_PRICE": "累計金額",
-            "UPDATED_AT": "更新日時",
+            'SAVING_DATE': '日付',
+            'AMOUNT': '枚数',
+            'TOTAL_AMOUNT': '累計枚数',
+            'TOTAL_PRICE': '累計金額',
+            'UPDATED_AT': '更新日時',
         }
     )
     
