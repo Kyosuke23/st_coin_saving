@@ -18,6 +18,20 @@ URL_GET_ALL_DATA = URL_INDEX + 'data/'
 # WebAPI(日付による絞り込み検索)
 URL_GET_DATA_BY_DATE = URL_GET_ALL_DATA + TODAY.strftime('%Y-%m-%d')
 
+def define_const():
+    # 今日の日付
+    TODAY = datetime.today()
+
+    # WebAPI(Index)
+    URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
+    # URL_INDEX = 'http://127.0.0.1:8000/'   # ローカルサーバ
+
+    # WebAPI(全件取得)
+    URL_GET_ALL_DATA = URL_INDEX + 'data/'
+
+    # WebAPI(日付による絞り込み検索)
+    URL_GET_DATA_BY_DATE = URL_GET_ALL_DATA + TODAY.strftime('%Y-%m-%d')
+
 def show_input_area():
     """
     入力フォーム周りの描画
