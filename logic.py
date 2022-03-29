@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import json
 import ast
 import pandas as pd
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 # WebAPI(Index)
 URL_INDEX = 'https://qjljun.deta.dev/' # サーバ
