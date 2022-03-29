@@ -23,7 +23,7 @@ def show_input_area():
     # 今日付のデータを取得
     res = requests.get(URL_GET_ALL_DATA + datetime.today().strftime('%Y-%m-%d'))
 
-    # 取得したデータを変換(=> dict)
+    # 取得したデータを変換(=> list)
     today_data = ast.literal_eval(json.loads(res.text))
 
     # 各項目を取得
@@ -72,8 +72,8 @@ def show_input_area():
     st.write((f'日付: {saving_date}'))
     st.write((f'今日の貯金枚数: {amount}枚'))
     st.write((f'今までの貯金額: ¥{total_price:,}'))
-        
-# ログ画面
+
+ 
 def show_log_table():
     """
     ログテーブルの描画
@@ -87,7 +87,7 @@ def show_log_table():
     # 過去1年のデータを取得
     res = requests.get(URL_GET_DATA_BETWEEN_DATE)
 
-    # 取得したデータを変換(=> dict)
+    # 取得したデータを変換(=> list)
     log_data = ast.literal_eval(json.loads(res.text))
 
     # タイトルを描画
