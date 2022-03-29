@@ -128,18 +128,18 @@ def show_log_table():
     total_price_list.pop(len(total_price_list) - 1) # 累計金額
     amount_list.pop(len(amount_list) - 1) # 枚数
     
-    # グラフを表示
-    graph1, graph2 = st.columns(2)
-    with graph1:
-        st.write('累計金額')
-        plt.plot(saving_date_list, total_price_list)
-        plt.xticks(rotation=90)
-        st.pyplot(plt)
-        plt.cla() # グラフをクリア
-    with graph2:
-        st.write('枚数(日次)')
-        plt.bar(saving_date_list, amount_list)
-        plt.xticks(rotation=90)
-        st.pyplot(plt)
-        plt.cla() # グラフをクリア
+    # # グラフを表示
+    # graph1, graph2 = st.columns(2)
+    # with graph1:
+    #     st.write('累計金額')
+    #     plt.plot(saving_date_list, total_price_list)
+    #     plt.xticks(rotation=90)
+    #     st.pyplot(plt)
+    #     plt.cla() # グラフをクリア
+    # with graph2:
+    #     st.write('枚数(日次)')
+    #     plt.bar(saving_date_list, amount_list)
+    #     plt.xticks(rotation=90)
+    #     st.pyplot(plt)
+    #     plt.cla() # グラフをクリア
 
