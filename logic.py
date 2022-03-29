@@ -1,3 +1,5 @@
+from faulthandler import disable
+from tkinter import DISABLED
 import streamlit as st
 import requests
 from datetime import datetime, timedelta
@@ -43,6 +45,13 @@ def show_input_area():
 
     # ボタン押下時の挙動
     if submit_button:
+        ########## 公開版はここを追加 ##########
+        st.success('公開版なので更新できません')
+        st.write((f'日付: {saving_date}'))
+        st.write((f'今日の貯金枚数: {amount}枚'))
+        st.write((f'今までの貯金額: ¥{total_price:,}'))
+        return
+        #####################################
         # WebAPI(更新)のURLを生成
         URL_UPDATE = URL_INDEX + 'update/' + req['target_date'] + '/' + str(req['amount'])
         res = requests.post(URL_UPDATE, data= json.dumps(req))
