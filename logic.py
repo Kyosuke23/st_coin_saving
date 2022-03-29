@@ -116,6 +116,7 @@ def show_log_table():
 
     # タイトルを描画
     st.write('## 貯金推移')
+    st.write('グラフ予定地')
 
     # グラフ用データリスト作成
     saving_date_list = [pd.to_datetime(data['SAVING_DATE']) for data in log_data] # 日付
