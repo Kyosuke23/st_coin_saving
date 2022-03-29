@@ -96,7 +96,7 @@ def show_log_table():
 
     # ヘッダー名称を変更
     df = df.rename(
-        columns={
+        columns = {
             'SAVING_DATE': '日付',
             'AMOUNT': '枚数',
             'TOTAL_AMOUNT': '累計枚数',
@@ -107,3 +107,33 @@ def show_log_table():
     
     # データフレームを描画
     st.dataframe(df, 800, 400)
+
+    # タイトルを描画
+    st.write('## 貯金推移')
+
+    # グラフ用データリスト作成
+    saving_date_list = [pd.to_datetime(data['SAVING_DATE']) for data in log_data] # 日付
+    total_price_list = [data['TOTAL_AMOUNT'] * 500 for data in log_data] # 累計金額
+    amount_list = [data['AMOUNT'] for data in log_data] # 枚数
+
+    # 初日のデータを削除
+    # TODO 今後残す？
+    saving_date_list.pop(len(saving_date_list) - 1) # 日付
+    total_price_list.pop(len(total_price_list) - 1) # 累計金額
+    amount_list.pop(len(amount_list) - 1) # 枚数
+    
+    # グラフを表示
+    graph1, graph2 = st.columns(2)
+    with graph1:
+        st.write('累計金額')
+        plt.plot(saving_date_list, total_price_list)
+        plt.xticks(rotation=90)
+        st.pyplot(plt)
+        plt.cla() # グラフをクリア
+    with graph2:
+        st.write('枚数(日次)')
+        plt.bar(saving_date_list, amount_list)
+        plt.xticks(rotation=90)
+        st.pyplot(plt)
+        plt.cla() # グラフをクリア
+
